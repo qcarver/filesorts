@@ -52,7 +52,7 @@ public class InsertionSort implements Sorter{
     
     @Override
     public Stats getStats(){
-        return new Stats(SortMode.INSERTION_SORT, A.get().length,
+        return new Stats(SortMode.INSERTION_SORT, A.length(),
                 sortingTime, A.getNumReads(), A.getNumWrites());
     }
 }

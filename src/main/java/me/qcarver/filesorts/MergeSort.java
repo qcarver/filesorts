@@ -71,12 +71,10 @@ public class MergeSort implements Sorter {
         int L[] = new int[n1 + 1];
         int R[] = new int[n2 + 1 ];
         for (int i = 0; i < n1; i++) {
-            //L[i] = A[start + i];
-            A.set(L[i], A.get(start + i));
+            L[i] =  A.get(start + i);
         }
         for (int j = 0; j < n2; j++) {
-            //R[j] = A[middle + 1 + j];
-            A.set(R[j], A.get(middle + 1 + j));
+            R[j] =  A.get(middle + 1 + j);
         }
         L[n1] = Integer.MAX_VALUE;
         R[n2] = Integer.MAX_VALUE;
@@ -84,12 +82,10 @@ public class MergeSort implements Sorter {
         int j = 0;
         for (int k = start; k < end + 1; k++) {
             if (L[i] <= R[j]) {
-                //A[k] = L[i];
-                A.set(k, A.get(L[i]));
+                A.set(k, L[i]);
                 i = i + 1;
-            } else{ //L[i] > R[j]
-                //A[k] = R[j];
-                A.set(k, A.get(R[j]));
+            } else{ 
+                A.set(k, R[j]);
                 j = j + 1;
             }
         }
@@ -101,7 +97,7 @@ public class MergeSort implements Sorter {
     
     @Override
     public Stats getStats(){
-        return new Stats(SortMode.MERGE_SORT, A.get().length,
+        return new Stats(SortMode.MERGE_SORT, A.length(),
                 sortingTime, A.getNumReads(), A.getNumWrites());
     }
 }

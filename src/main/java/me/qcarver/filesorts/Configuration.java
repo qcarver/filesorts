@@ -10,6 +10,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import java.util.Random;
 
 /**
  *
@@ -22,6 +23,9 @@ public class Configuration {
     boolean help = false;
     int arraySize = 10;
     boolean batch = false;
+    boolean verbose = false;
+    Random random = new Random();
+    long seed = random.nextInt();
        
     Configuration(String[] args) {
         parse(args);
@@ -73,6 +77,10 @@ public class Configuration {
         options.addOption("b", "batchMode", false, "do several runs from 1 to "+
                 " a specified arraySize, default is " + arraySize +
                 " sortMode " + sortMode.toString());
+        options.addOption("v", "verbose", false, "show more output " +
+                "default is, " + ((verbose)?"true":"false"));
+        options.addOption("e", "seed", true, "specify a random seed used to "+
+                "make unsorted input lists, default is random");
         options.addOption("a", "arraySize", true, "number of ints to sort, "
                 + "default is " + arraySize);
         options.addOption("s", "sortMode", true, 
@@ -85,6 +93,7 @@ public class Configuration {
             cmd = parser.parse(options, args);
             help = (cmd.hasOption("h")) ? true : false;
             batch = (cmd.hasOption("b"))? true : false;
+            verbose = (cmd.hasOption("v"))? true: false;
         } catch (ParseException e) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("FileSorter",
@@ -99,6 +108,8 @@ public class Configuration {
                     sortMode = 
                 SortMode.getInstanceOf(cmd.getOptionValue("sortMode")):
                 sortMode);
+        seed = (cmd.hasOption("e")?
+                Integer.parseInt(cmd.getOptionValue("seed")) : seed);
     }
 
     Options getOptions() {

@@ -11,7 +11,9 @@ package me.qcarver.filesorts;
    public enum SortMode {
         
         MERGE_SORT("mergeSort"),
-        INSERTION_SORT("insertionSort");
+        INSERTION_SORT("insertionSort"),
+        QUICK_SORT("quickSort"),
+        HEAP_SORT("heapSort");
         String name;
         @Override
             public String toString(){

@@ -1,4 +1,6 @@
 /*
+ * from Cormen, Introduction to Algorithms 3rd Ed, Ch.7
+ * 
  * QUICKSORT(A,p,r)
  *  if p < r
  *      q=PARTITION(A,p,r)
@@ -66,7 +68,7 @@ public class QuickSort implements Sorter{
 
     @Override
     public Stats getStats() {
-        return new Stats(SortMode.QUICK_SORT, A.get().length,
+        return new Stats(SortMode.QUICK_SORT, A.length(),
         sortingTime, A.getNumReads(), A.getNumWrites());
     }
     

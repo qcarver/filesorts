@@ -10,6 +10,7 @@ public class App
 {
     private int A[] = null;
     private Sorter sorter = null;
+    boolean verbose = false;
     
     
     public static void main(String[] args) {
@@ -20,7 +21,8 @@ public class App
             App fileSorter = new App(configuration);
             if (configuration.getBatchMode()) {
                 for (int i = 1; i < configuration.getArraySize(); i++) {
-                    fileSorter.init(configuration.sortMode, i);
+                    fileSorter.init(configuration.sortMode, i, 
+                            configuration.verbose, configuration.seed);
                     fileSorter.go();
                 }
             } else {
@@ -36,19 +38,22 @@ public class App
     }
     
     public App(Configuration configuration){
-        init(configuration.sortMode, configuration.arraySize);        
+        init(configuration.sortMode, configuration.arraySize,
+                configuration.verbose, configuration.seed);        
     }
     
     public void go(){
-//        if (A.length < 512){
-//            System.out.println("Input Array");
-//            printArray(A);
-//        }
+        if (verbose == true){
+            System.out.println("Input Array");
+            printArray(A);
+        }
         sorter.sort(A);
-//        if (A.length < 512){
-//            System.out.println("Output Array");
-//            printArray(A);
-//        }
+        A=sorter.getA();
+        if (verbose == true){
+            A=sorter.getA();
+            System.out.println("Output Array");
+            printArray(A);
+        }
         Stats stats = sorter.getStats();
         System.out.println("Sort type: " + stats.sortMode +
                             " arrayLen " + stats.arrayLen +
@@ -57,16 +62,24 @@ public class App
                             ", numWrites: " + stats.numWrites);
     }
     
-    private void init(SortMode sortMode, int arraySize){
-        A = makeRandomArray(arraySize);
+    private void init(SortMode sortMode, int arraySize, boolean verbose, 
+            long seed){
+        this.verbose = verbose;
+        A = makeRandomArray(arraySize, seed);
 
         if (sortMode == SortMode.MERGE_SORT){
-            //System.out.println("Merge Sorting...");
+            if (verbose) System.out.println("Merge Sorting...");
             sorter = new MergeSort();
-        } else {//insertionSort 
-            //System.out.println("Insertion Sorting..."); 
+        } else if (sortMode == SortMode.INSERTION_SORT) {
+            if (verbose) System.out.println("Insertion Sorting..."); 
             sorter = new InsertionSort();
-        }          
+        } else if (sortMode == SortMode.QUICK_SORT){
+            if (verbose) System.out.println("QuickSorting..."); 
+            sorter = new QuickSort();
+        } else {
+            if (verbose) System.out.print("heapSorting...");
+            sorter = new HeapSort();
+        }
     }
     
     static public void printArray(int[] A){
@@ -76,9 +89,13 @@ public class App
         System.out.println();
     }
     
-    public int[] makeRandomArray(int length){
+    public int[] makeRandomArray(int length, long seed){
         int A[] = new int[length];
-        Random random = new Random();
+        if (verbose){
+            System.out.println("Making rnd array of length " + length +
+                    " from seed " + seed );
+        }
+        Random random = new Random(seed);
         for (int i = 0; i < A.length; i ++){
             A[i] = random.nextInt(65535);
         }
