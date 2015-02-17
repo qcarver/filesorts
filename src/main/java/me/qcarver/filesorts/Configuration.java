@@ -11,6 +11,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import java.util.Random;
+import org.apache.commons.cli.OptionBuilder;
 
 /**
  *
@@ -87,6 +88,15 @@ public class Configuration {
                 SortMode.MERGE_SORT.toString()+ " or " +
                 SortMode.INSERTION_SORT.toString() + ". default is "+
                 sortMode.toString());
+        options.addOption(
+                OptionBuilder.withArgName("property=value")
+                .hasArgs(2)
+                .withValueSeparator()
+                .withDescription("use value for given property")
+                .create("B")
+                );
+        
+
 
         CommandLineParser parser = new BasicParser();
         try {
@@ -100,6 +110,21 @@ public class Configuration {
                     App.class.getSimpleName() + " [options]",
                     options,
                     "", true);
+            System.exit(0);
+        }
+        if (help){
+             HelpFormatter formatter = new HelpFormatter();
+            formatter.printHelp("FileSorter",
+                    App.class.getSimpleName() + " [options]",
+                    options,
+                    "", true);
+            System.exit(0);           
+        }
+        
+        if (batch){
+            BatchOptions batchOptions = 
+                    new BatchOptions(cmd.getOptionProperties("B")); 
+                    batchOptions.printBatchOptions();
         }
 
         arraySize = (cmd.hasOption("a")?
