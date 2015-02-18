@@ -1,5 +1,6 @@
 package me.qcarver.filesorts;
 import java.util.Random;
+import java.util.Set;
 import org.apache.commons.cli.HelpFormatter;
 
 /**
@@ -12,21 +13,36 @@ public class App
     private Sorter sorter = null;
     boolean verbose = false;
     
-    
     public static void main(String[] args) {
         //Gui.main("me.qcarver.wumpus.Gui");
         Configuration configuration = new Configuration(args);
+        Stats avStats = null;
 
         if (!configuration.getHelp()) {
             App fileSorter = new App(configuration);
             if (configuration.getBatchMode()) {
-                for (int i = 1; i < configuration.getArraySize(); i++) {
-                    fileSorter.init(configuration.sortMode, i, 
-                            configuration.verbose, configuration.seed);
-                    fileSorter.go();
+                for (int arrayLen = configuration.getBatchMinArrayLen();
+                    arrayLen < configuration.getBatchMaxArrayLen();arrayLen ++){
+                    for (SortMode sort : configuration.getBatchSortModes()){
+                        for (int run = 0; run < configuration.getBatchNumRunsPerLen(); run++){
+                            fileSorter.init(sort, arrayLen, 
+                            configuration.verbose, configuration.seed + run);
+                            Stats currStats = fileSorter.go();
+                            //System.out.println("\t" + currStats);
+                            if (run == 0){
+                                avStats = new Stats(currStats);
+                            } else {
+                                avStats.keepRunningAverage(run, currStats);
+                            }
+                        }
+                        //avStats.printStats();
+                        System.out.print("array len: " + arrayLen + ", " + avStats.sortMode + " time, " + avStats.sortingTime + ", ");
+                        avStats = null;
+                    }
+                    System.out.println();
                 }
             } else {
-                fileSorter.go();
+                (fileSorter.go()).printStats();
             }
         } else {
             HelpFormatter formatter = new HelpFormatter();
@@ -39,10 +55,10 @@ public class App
     
     public App(Configuration configuration){
         init(configuration.sortMode, configuration.arraySize,
-                configuration.verbose, configuration.seed);        
+                configuration.verbose, configuration.seed); 
     }
     
-    public void go(){
+    public Stats go(){
         if (verbose == true){
             System.out.println("Input Array");
             printArray(A);
@@ -55,11 +71,7 @@ public class App
             printArray(A);
         }
         Stats stats = sorter.getStats();
-        System.out.println("Sort type: " + stats.sortMode +
-                            " arrayLen " + stats.arrayLen +
-                            ", time: " + stats.sortingTime +
-                            ", numReads:" + stats.numReads +
-                            ", numWrites: " + stats.numWrites);
+        return stats;
     }
     
     private void init(SortMode sortMode, int arraySize, boolean verbose, 

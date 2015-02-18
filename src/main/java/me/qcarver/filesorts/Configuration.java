@@ -4,6 +4,7 @@
  */
 package me.qcarver.filesorts;
 
+import java.util.HashSet;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -11,6 +12,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import java.util.Random;
+import java.util.Set;
 import org.apache.commons.cli.OptionBuilder;
 
 /**
@@ -27,6 +29,7 @@ public class Configuration {
     boolean verbose = false;
     Random random = new Random();
     long seed = random.nextInt();
+    BatchOptions batchOptions = null;
        
     Configuration(String[] args) {
         parse(args);
@@ -62,6 +65,29 @@ public class Configuration {
      */
     public boolean getBatchMode(){
         return batch;
+    }
+    
+    public int getBatchMinArrayLen(){
+        return (batchOptions != null)? batchOptions.minArrayLen:1;
+    }
+    
+    public int getBatchMaxArrayLen(){
+        return (batchOptions != null)? batchOptions.maxArrayLen:10;
+    }
+    
+    public int getBatchNumRunsPerLen(){
+        return (batchOptions != null)? batchOptions.numRunsPerLen:1;
+    }
+    
+    public Set<SortMode> getBatchSortModes(){
+        Set<SortMode> sortModes = null;
+        if (batchOptions == null){
+            sortModes = new HashSet<SortMode>();
+            sortModes.add(SortMode.values()[0]);
+        }
+        else sortModes = batchOptions.whichSorts;
+        
+        return sortModes;
     }
     
 
@@ -122,9 +148,10 @@ public class Configuration {
         }
         
         if (batch){
-            BatchOptions batchOptions = 
+            batchOptions = 
                     new BatchOptions(cmd.getOptionProperties("B")); 
-                    batchOptions.printBatchOptions();
+                    if (verbose)
+                        batchOptions.printBatchOptions();
         }
 
         arraySize = (cmd.hasOption("a")?

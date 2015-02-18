@@ -101,7 +101,7 @@ public class HeapSort implements Sorter{
 
     @Override
     public Stats getStats() {
-        return new Stats(SortMode.QUICK_SORT, A.get().length,
+        return new Stats(SortMode.HEAP_SORT, A.get().length,
         sortingTime, A.getNumReads(), A.getNumWrites());
     }
 }

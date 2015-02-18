@@ -19,6 +19,22 @@ public class BatchOptions {
     int maxArrayLen = 10;
     int numRunsPerLen = 1;
     Set<SortMode> whichSorts = null;
+
+    public int getMaxArrayLen() {
+        return maxArrayLen;
+    }
+
+    public int getMinArrayLen() {
+        return minArrayLen;
+    }
+
+    public int getNumRunsPerLen() {
+        return numRunsPerLen;
+    }
+
+    public Set<SortMode> getWhichSorts() {
+        return whichSorts;
+    }
     
     /**
      * default constructor, initialize with very default options
