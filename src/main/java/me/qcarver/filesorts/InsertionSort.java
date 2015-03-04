@@ -20,7 +20,7 @@ import java.util.Date;
  * @author Quinn
  */
 public class InsertionSort implements Sorter{
-    private A A = null;
+    protected A A = null;
     private long sortingTime = 0;
     
     @Override
@@ -34,8 +34,8 @@ public class InsertionSort implements Sorter{
         sortingTime = timeEnd - timeStart;
     }
     
-    private void insertionSort(int start, int end){
-        for (int j = 1 ; j < end + 1 ; j++){
+    protected void insertionSort(int start, int end){
+        for (int j = start + 1 ; j < end + 1 ; j++){
             int key = A.get(j);
             int i = j-1;
             for (; ((i > -1)&&(A.get(i)>key));i--){

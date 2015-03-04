@@ -68,10 +68,12 @@ public class A {
      * @param index1
      * @param index2 
      */
-    public void exchange(int index1, int index2){
-        int _index1 = get(index1);
-        set(index1,get(index2));
-        set(index2,_index1);
+    public void exchange(int index1, int index2) {
+        if (index1 != index2) {
+            int _index1 = get(index1);
+            set(index1, get(index2));
+            set(index2, _index1);
+        }
     }
     
     /**

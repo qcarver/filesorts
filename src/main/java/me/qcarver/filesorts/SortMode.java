@@ -13,7 +13,8 @@ package me.qcarver.filesorts;
         MERGE_SORT("mergeSort"),
         INSERTION_SORT("insertionSort"),
         QUICK_SORT("quickSort"),
-        HEAP_SORT("heapSort");
+        HEAP_SORT("heapSort"),
+        SELECTION_SORT("selectionSort");
         String name;
         @Override
             public String toString(){

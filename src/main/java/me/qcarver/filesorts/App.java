@@ -88,10 +88,15 @@ public class App
         } else if (sortMode == SortMode.QUICK_SORT){
             if (verbose) System.out.println("QuickSorting..."); 
             sorter = new QuickSort();
-        } else {
+        } else if (sortMode == SortMode.HEAP_SORT){
             if (verbose) System.out.print("heapSorting...");
             sorter = new HeapSort();
+        } else {
+            if (verbose) System.out.print("selectonSorting...");
+            sorter = new SelectionSort();
         }
+            
+        
     }
     
     static public void printArray(int[] A){
