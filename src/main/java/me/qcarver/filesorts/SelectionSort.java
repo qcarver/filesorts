@@ -1,21 +1,6 @@
 /*
- * from Cormen, Introduction to Algorithms 3rd Ed, Ch.7
- * 
- * QUICKSORT(A,p,r)
- *  if p < r
- *      q=PARTITION(A,p,r)
- *      QUICKSORT(A,p,q-1)
- *      QUICKSORT(A,q+1,r)
- * 
- * PARTITION(A,p,r)
- *  x = A[r]
- *  i = p-1
- *  for j = p to r-1
- *      if A[j] ≤ x
- *          i = i + 1
- *          exchange A[i] with A[j]
- *  exchange A[i+1] with A[r]
- *  return i+1
+ * this is a version of QuickSort which uses a median of medians for
+ * a pivot value
  */
 package me.qcarver.filesorts;
 
@@ -30,6 +15,11 @@ public class SelectionSort implements Sorter{
     private long sortingTime = 0;
     boolean verbose = true;
         
+    /**
+     * a custom override of the InsertionSortClass which makes it easier
+     * for us to inject our own instance of A for sorting and return a
+     * median (pivot) value
+     */
     class PivotSorter extends InsertionSort{
             int start = 0, end = 0;
             void sort(A a, int start, int end){
@@ -54,6 +44,13 @@ public class SelectionSort implements Sorter{
         sortingTime = timeEnd - timeStart;
     }
     
+    /**
+     * gets the medians of five adjacent subranges of start-to-end
+     * and the pivot as the median value from those five subrange medians
+     * @param start
+     * @param end
+     * @return 
+     */
     private int getPivot(int start, int end){
         int length = end - start;
         int midIndex = -1, minIndex = -1, maxIndex = -1;
